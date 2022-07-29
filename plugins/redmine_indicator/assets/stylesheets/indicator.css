@@ -1,0 +1,91 @@
+table.indicator.summary {
+  width: 100%;
+  text-align: center;
+  table-layout: fixed;
+}
+
+table.indicator.summary .circle {
+  text-align: center;
+  line-height: 0;
+  border-radius: 50%;
+  border-width: 5px;
+  border-style: solid;
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+}
+
+table.indicator.summary .circle h1 {
+  padding: 0px;
+  font-style: initial;
+}
+
+.circle.due {
+  border-color: #fa4f4f;
+}
+
+.circle.due h1 a {
+  color: #fa4f4f;
+}
+
+.circle.today {
+  border-color: #00c0aa;
+}
+
+.circle.today h1 a {
+  color: #00c0aa;
+}
+
+.circle.next {
+  border-color: #00c0aa;
+}
+
+.circle.next h1 a {
+  color: #00c0aa;
+}
+
+.circle.nothing {
+  border-color: #bdbdbd;
+}
+
+.circle.nothing h1 a {
+  color: #bdbdbd;
+}
+
+canvas.doughnut {
+  max-width: 400px;
+  max-height: 400px;
+  margin: auto;
+}
+
+canvas.line {
+  max-height: 300px;
+  max-width: 600px;
+  margin: auto;
+}
+
+a.myprojects {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+div.list-projects a.new-issue,
+div.list-projects a.new-time,
+div.list-projects a.new-wiki {
+  float: right;
+  padding-right: 20px;
+}
+
+@media screen and (max-width: 899px) {
+  table.indicator.summary .circle {
+    width: 70px;
+    height: 70px;
+  }
+
+  div.list-projects a.new-issue,
+  div.list-projects a.new-time,
+  div.list-projects a.new-wiki {
+    text-indent: -9999px;
+  }
+}

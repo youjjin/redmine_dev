@@ -1,0 +1,117 @@
+<!--agile차트를 보여주는 부분-->
+<% if issues_scope.empty? %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% elsif %w(work_burndown cumulative_flow hours_velocity).include?(chart) && issues_scope.count > RedmineAgile.time_reports_items_limit %>
+  <p class="nodata"><%= l(:label_agile_too_many_items, :max => RedmineAgile.time_reports_items_limit) %></p>
+<% else %>
+  <!--테두리 작업중...-->
+  <fieldset style= "border:1px solid #d3d3d3; border-radius: 20px; padding:20px; margin:30px;">
+    <legend>Burn-Down 차트</legend>
+    <div class="agile-chart-container">
+      <canvas id="agile-chart"></canvas>
+      <div style="clear: both;"></div>
+    </div>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  $(document).ready(function(){
+    Chart.plugins.register({
+      beforeDraw: function(chartInstance, easing) {
+        if (chartInstance.config.options.tooltips.onlyShowForDatasetIndex) {
+          var tooltipsToDisplay = chartInstance.config.options.tooltips.onlyShowForDatasetIndex;
+          var active = chartInstance.tooltip._active || [];
+          if (active.length > 0) {
+            if (tooltipsToDisplay.indexOf(active[0]._datasetIndex) === -1) {
+              chartInstance.tooltip._model.opacity = 0;
+            }
+          }
+        }
+      }
+    });
+
+    if (document.getElementById("agile-chart")) {
+      $.getJSON(<%= raw url_for(controller: 'agile_charts', action: 'render_chart', project_id: @project,
+                                chart: chart, version_id: @version, query_id: @query.try(:id), chart_unit: chart_unit).to_json %>, function(data){
+
+        Chart.defaults.global.defaultFontColor = 'black';
+        Chart.defaults.global.defaultFontFamily = '"맑은 고딕", sans-serif';
+        Chart.defaults.global.defaultFontStyle = 'bold';
+        var chartData = {
+          labels: data['labels'],
+          datasets: data['datasets'],
+          stacked: data['stacked']
+        };
+
+
+      <!--아마도 여기가 차트 만드는 부분-->
+      new Chart(document.getElementById("agile-chart").getContext("2d"), {
+        type: data['type'] || 'bar',
+        data: chartData,
+        options: {
+
+          tooltips: {
+            onlyShowForDatasetIndex: data['show_tooltips'],
+            callbacks: chartTooltipCallbacks(data['type'])
+          },
+          maintainAspectRatio: false,
+          legend: {
+            position: 'right',
+            labels: {
+              filter: function(legendItem, chartData) {
+                if (legendItem.text) { return true }
+              }
+            }
+          },
+          <%# 
+          <!--일감 BurnDown이라는 표기를 보여주는 부분-->
+          <!-- title: {
+            display: true,
+            fontSize: 25,
+            fontStyle: 'normal',
+            text: data['title']
+          }, -->
+
+          elements: {
+            line: {
+                tension: 0, // disables bezier curves
+            }
+          },
+          %>
+          scales: {
+            yAxes: [{
+              stacked: data['stacked'],
+              scaleLabel: {
+                display: true,
+                fontColor: 'rgba(255, 0, 0 ,1)',
+                fontSize: 14,
+                labelString: data['y_title']
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                autoSkip: true,
+                maxRotation: 0,
+                userCallback: function(value, index, values) {
+                  if (data['type'] == 'scatter') {
+                    return data['labels'][value]
+                  } else {
+                    return value
+                  }
+                }
+              }
+            }]
+            },
+          }
+        });
+      });
+    }
+  });
+<% end %>
+
+<!--사용방법 설명-->
+<fieldset style= "border:1px solid #d3d3d3; border-radius: 20px; padding:20px; margin:30px;">
+  <legend>이용 Guide</legend>
+  <p>  ㅇ 이상적인 그래프 보다 실제 그래프가 위에 있으면 프로젝트가 느리게 진행되고 있는 것 </p>
+  <p>  ㅇ 이상적인 그래프 보다 실제 그래프가 아래에 있으면 프로젝트가 빠르게 진행되고 있는 것 </p>
+</fieldset>

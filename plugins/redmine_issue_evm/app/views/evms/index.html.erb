@@ -1,0 +1,82 @@
+<% html_title("Project tracking with EVM") %>
+<!-- sub title -->
+<% content_for :title_sub do %>
+  <%= l(:label_nav_main) %>
+<% end %>
+<% if @no_data %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+  <!--Sidebar-->
+  <% if @cfg_param[:display_explanation] %>
+    <% content_for :sidebar do %>
+      <%= render partial: "/evms/explanation" %>
+    <% end %>
+  <% end %>
+  <!-- contextual -->
+  <%= render partial: "/common/contextual", locals: { project: @project, cfg_param: @cfg_param, report_param: @report_param} %>
+  <!-- Content of view option -->
+  <% content_for :additional_option do %>
+    <!-- calculate use baseline -->
+    <div class="evm-div-col">
+      <fieldset><legend><%= l(:label_baseline_use) %></legend>
+        <%= check_box_tag :no_use_baseline, true,
+                          @cfg_param[:no_use_baseline],
+                          onclick: "disableobject('evmbaseline_id', this.checked);"%>
+        <%= label_tag l(:label_no_use_baseline) %>
+        <%= select_tag :evmbaseline_id,
+                        options_from_collection_for_select(@selectable_baseline, :id, :subject,
+                                                          @cfg_param[:baseline_id]),
+                                                          disabled: @cfg_param[:no_use_baseline] %>
+      </fieldset>
+    </div>
+    <!-- explanation evm -->
+    <div class="evm-div-col">
+      <fieldset><legend><%= l(:label_explanation) %></legend>
+        <%= check_box_tag :display_explanation, true, @cfg_param[:display_explanation] %>
+        <%= label_tag l(:label_display_explanation) %>
+      </fieldset>
+    </div>
+  <% end %>
+  <!-- view option -->
+  <%= render partial: "/common/option_field"%>
+  <!--metrics-->
+  <%= render partial: "/evms/metrics",
+      locals: { version_list: @count_version_list,
+                assignee_list: @count_assignee_list,
+                tracker_list: @count_tracker_list,
+                project_metrics: @project_metrics,
+                use_baseline: @project_evm.pv_baseline,
+                baseline_variance: @baseline_variance,
+                finished_date: @project_evm.finished_date,
+                project: @project,
+                cfg_param: @cfg_param } %>
+  <!-- More information tab -->
+  <div class="tab-wrap">
+    <input id="TAB-01" type="radio" name="TAB" class="tab-switch" checked="checked" ><label class="tab-label" for="TAB-01"><%= l(:subtitle_evm_chart_main)%></label>
+    <div class="tab-content">
+      <!-- Main Chart -->
+      <B><%= used_baseline_name(@selectable_baseline, @cfg_param[:baseline_id]) %></B>
+      <%= render partial: "/evms/project_chart_js",
+          locals: { basis_date: convert_to_labels(@project_evm.finished_date || @cfg_param[:basis_date]),
+                    chart_data: @evm_chart_data,
+                    basis_date_label: basis_date_label(@project_evm.finished_date) }%>
+    </div>
+    <% if @cfg_param[:display_performance] %>
+      <input id="TAB-02" type="radio" name="TAB" class="tab-switch" ><label class="tab-label" for="TAB-02"><%= l(:subtitle_evm_chart_performance) %></label>
+      <div class="tab-content">
+        <%= render partial: "/evms/performance_chart_js",
+            locals: { basis_date: convert_to_labels(@cfg_param[:basis_date]) ,
+                      performance_chart_data: @performance_chart_data } %>
+      </div>
+    <% end %>
+
+  </div>
+  <!--사용방법 설명-->
+    <fieldset style= "border:1px solid #d3d3d3; border-radius: 20px; padding:20px; margin:30px;">
+      <legend>이용 Guide</legend>
+      <p>  ㅇ 시작일, 완료일, 추정시간, 소요시간을 산정하여 계획 작업량 및 실제 작업량 시각화 </p>
+      <p>  ㅇ 계획작업량(PV) = 계획상 현 시점까지의 예상 작업량 </p>
+      <p>  ㅇ 실제작업량(EV) = 실제로 달성한 작업량 </p>
+      <p>  ㅇ 계획대비 진척도(SPI) = 계획 작업량 대비 실제 작업량의 상대적 비율 (1보다 크면 긍정적, 작으면 부정적) </p>
+    </fieldset>
+<% end %>

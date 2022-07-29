@@ -1,0 +1,61 @@
+<section>
+  <table id="evm-indicator-value-table" border="1" bordercolor = "#bbb">
+    <tr>
+      <th rowspan="2"><%=l(:indicator_table_header_date)%></th>
+      <th colspan="5"><%=l(:indicator_table_header_today)%></th>
+      <th colspan="2"><%=l(:indicator_table_header_difference)%></th>
+      <th colspan="3"><%=l(:indicator_table_header_performance)%></th>
+      <th colspan="4"><%=l(:indicator_table_header_forecast)%></th>
+    </tr>
+    <tr>
+      <th>BAC</th>
+      <th>Complete EV</th>
+      <th>PV</th>
+      <th>EV</th>
+      <th>AC</th>
+      <th>SV</th>
+      <th>CV</th>
+      <th>SPI</th>
+      <th>CPI</th>
+      <th>CR</th>
+      <th>EAC</th>
+      <th>ETC</th>
+      <th>VAC</th>
+      <th>TCPI</th>
+    </tr>
+    <tr>
+      <td rowspan="2"><%=project_evm.basis_date%></td>
+      <td id="BAC_HOURS"><%=project_evm.bac%></td>
+      <td><%=project_evm.complete_ev%> %</td>
+      <td id="PV_HOURS"><%=project_evm.today_pv%></td>
+      <td id="EV_HOURS"><%=project_evm.today_ev%></td>
+      <td id="AC_HOURS"><%=project_evm.today_ac%></td>
+      <td id="SV_HOURS"><%=project_evm.today_sv%></td>
+      <td id="CV_HOURS"><%=project_evm.today_cv%></td>
+      <%=performance_indicator(project_evm.today_spi, cfg_param[:limit_spi])%>
+      <%=performance_indicator(project_evm.today_cpi, cfg_param[:limit_cpi])%>
+      <%=performance_indicator(project_evm.today_cr, cfg_param[:limit_cr])%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.eac)%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.etc)%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.vac)%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.tcpi)%>
+    </tr>
+    <tr>
+      <td><%=project_evm.bac(cfg_param[:working_hours])%></td>
+      <td><%=project_evm.complete_ev(cfg_param[:working_hours])%> %</td>
+      <td><%=project_evm.today_pv(cfg_param[:working_hours])%></td>
+      <td><%=project_evm.today_ev(cfg_param[:working_hours])%></td>
+      <td><%=project_evm.today_ac(cfg_param[:working_hours])%></td>
+      <td><%=project_evm.today_sv(cfg_param[:working_hours])%></td>
+      <td><%=project_evm.today_cv(cfg_param[:working_hours])%></td>
+      <%=performance_indicator(project_evm.today_spi(cfg_param[:working_hours]), cfg_param[:limit_spi])%>
+      <%=performance_indicator(project_evm.today_cpi(cfg_param[:working_hours]), cfg_param[:limit_cpi])%>
+      <%=performance_indicator(project_evm.today_cr(cfg_param[:working_hours]), cfg_param[:limit_cr])%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.eac(cfg_param[:working_hours]))%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.etc(cfg_param[:working_hours]))%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.vac(cfg_param[:working_hours]))%>
+      <%=forecast_value_finished(project_evm.finished_date, project_evm.tcpi(cfg_param[:working_hours]))%>
+    </tr>
+  </table>
+  <p><%= l(:explanation_upper_row)%> <%= l(:explanation_lower_row)%></p>
+</section>

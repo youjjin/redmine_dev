@@ -1,0 +1,85 @@
+<!--
+<div class="evm-div-col-basic">
+  <fieldset><legend><%= l(:Indicator_metrics) %></legend>
+  <table>
+    <tr>
+      <td align="right"><%= l(:indicator_target_issues_count) %>:</td>
+      <td><%= project_metrics[:target_issue_ids] %> / <%= project_metrics[:total_issue_ids] %></td>
+    </tr>
+    <tr>
+      <td align="right"><%= l(:indicator_status) %>:</td>
+      <td><%= project_status(project_metrics[:state]) %> <%= format_date(finished_date) %></td>
+    </tr>
+    <tr>
+      <td align="right"><%= l(:indicator_duration) %>:</td>
+      <td><%= format_date(project_metrics[:plan_start_date]) %> - <%= format_date(project_metrics[:plan_due_date]) %></td>
+    </tr>
+    <tr>
+      <td align="right"><%= l(:indicator_difference) %>:</td>
+      <td><%= project_metrics[:due_date_difference] %></td>
+    </tr>
+  </table>
+  </fieldset>
+</div>
+<% if use_baseline %>
+  <div class="evm-div-col-baseline">
+    <fieldset><legend><%= l(:indicator_baseline_variance) %></legend>
+    <table>
+      <tr>
+        <td align="right"><%= l(:indicator_bac) %>:</td>
+        <td><%=difference_color(baseline_variance[:bac])%></td>
+      </tr>
+      <tr>
+        <td align="right"><%= l(:indicator_due_date) %>:</td>
+        <td><%=difference_color(baseline_variance[:due_date])%></td>
+      </tr>
+      <tr>
+        <td align="right"><%= l(:indicator_schedule) %>:</td>
+        <td><%=difference_color(baseline_variance[:schedule])%></td>
+      </tr>
+    </table>
+    <div align="right"><%= link_to l(:more_difference_details), { controller: :evmbaselinediffdetails, action: :index, id: project.id, params: cfg_param }%></div>
+    </fieldset>
+  </div>
+<% end %>
+<% if version_list.present? %>
+  <div class="evm-div-col-version">
+    <fieldset><legend><%=l(:field_version)%></legend>
+    <table>
+      <% version_list.each do |name, count| %>
+        <tr>
+          <td><%= name %></td>
+          <td align="right"><%= count %></td>
+        </tr>
+      <% end %>
+    </table>
+    </fieldset>
+  </div>
+<% end %>
+<div class="evm-div-col-assignee">
+  <fieldset><legend><%=l(:field_assigned_to)%></legend>
+  <table id="metrics-table">
+    <% assignee_list.each do |name, count| %>
+      <tr>
+        <td><%= name %></td>
+        <td align="right"><%= count %></td>
+      </tr>
+    <% end %>
+  </table>
+  </fieldset>
+</div>
+<div class="evm-div-col-tracker">
+  <fieldset><legend><%=l(:field_tracker)%></legend>
+  <table>
+    <% tracker_list.each do |name, count| %>
+      <tr>
+        <td><%= name %></td>
+        <td align="right"><%= count %></td>
+      </tr>
+    <% end %>
+  </table>
+  </fieldset>
+</div>
+<div class="metrics-apply"></div>
+<br>
+-->
