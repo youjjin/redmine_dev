@@ -711,3 +711,5 @@ Creating scope :system. Overwriting existing method Enumeration.system.
 Creating scope :sorted. Overwriting existing method User.sorted.
 Creating scope :system. Overwriting existing method Enumeration.system.
 Creating scope :sorted. Overwriting existing method User.sorted.
+Creating scope :system. Overwriting existing method Enumeration.system.
+Creating scope :sorted. Overwriting existing method User.sorted.
